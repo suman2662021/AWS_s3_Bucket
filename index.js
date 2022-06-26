@@ -8,13 +8,15 @@ app.use(fileUpload());
 const AWS = require("aws-sdk");
 const port = 3000;
 
-const BUCKET_NAME = "coachbudy";
+const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ID,
   secretAccessKey: process.env.AWS_SECRET,
   region: process.env.REGION,
 });
+
+//upload route
 
 app.post("/upload", function (req, res) {
 
@@ -41,7 +43,7 @@ app.post("/upload", function (req, res) {
   const params = {
     Body: req.files["file"].data,
     Key: `${coachingName}/${req.files["file"].name}`, //locate object in a folder
-    // ACL: "public-read",
+    ACL: "public-read",
     Bucket: BUCKET_NAME,
   };
 
@@ -55,6 +57,7 @@ app.post("/upload", function (req, res) {
   });
 });
 
+//delete route
 app.delete("/delete/:filename", async (req, res) => {
   const { coachingName } = req.body;
   const filename = req.params.filename;
