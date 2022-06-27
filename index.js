@@ -55,6 +55,15 @@ app.post("/upload", function (req, res) {
   });
 });
 
+//download route
+app.get("/download/:filename", async (req, res) => {
+  const { coachingName } = req.body;
+  const filename = req.params.filename;
+  let download_file = await s3.getObject({ Bucket: BUCKET_NAME, Key: `${coachingName}/${filename}` }).promise();
+  res.send(download_file.Body)
+});
+
+//delete route
 app.delete("/delete/:filename", async (req, res) => {
   const { coachingName } = req.body;
   const filename = req.params.filename;
