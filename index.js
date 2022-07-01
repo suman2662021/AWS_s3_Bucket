@@ -8,7 +8,7 @@ app.use(fileUpload());
 const AWS = require("aws-sdk");
 const port = 3000;
 
-const BUCKET_NAME = "coachbudy-1";
+const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ID,
