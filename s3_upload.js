@@ -3,7 +3,7 @@ const { s3 } = require('./s3');
 
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 
-exports.uploadFileToS3 = async (params) => {
+exports.uploadFileToS3 = async (coachingName, document) => {
     try {
         const param = {
             Bucket: BUCKET_NAME,
@@ -17,16 +17,24 @@ exports.uploadFileToS3 = async (params) => {
             }
         });
 
+        let params = {
+            Body: document.data,
+            Key: `${coachingName}/${document.name}`, //locate object in a folder
+            ACL: "public-read",
+            Bucket: BUCKET_NAME,
+        };
+
         const file = await s3.upload(params).promise();
 
         if (!file) {
-            // return res.status(500).json({ message: "failed to upload file" });
-            console.log("failed to upload image")
+            console.log("Failed to upload File")
+            throw new Error("Failed to upload File");
         }
-        console.log(file.Location)
-        // return res.status(200).json({ download_Link: file.location, message: "file uploaded successfully" });
+
+        return file.Location;
+
     } catch (error) {
         console.log(error);
-        // return res.status(500).json({ error: error.message });
+        throw new Error("Failed to upload File");
     }
 }
