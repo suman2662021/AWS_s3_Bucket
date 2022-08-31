@@ -41,7 +41,6 @@ app.post("/upload", function (req, res) {
   const params = {
     Body: req.files["file"].data,
     Key: `${coachingName}/${req.files["file"].name}`, //locate object in a folder
-    // ACL: "public-read",
     Bucket: BUCKET_NAME,
   };
 
